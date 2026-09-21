@@ -18,7 +18,7 @@ def read_times(filename):
 
 def plot_times():
     # Set the path for the data folder
-    data_folder = 'data/'
+
 
     # Create lists to store the sizes and average times
     sizes_filter1 = []

@@ -1,0 +1,17 @@
+(1) Both `filter1` and `filter2` count and return the number of pixels whose red value is greater than both the green and blue values. 
+The difference is the order in which they traverse the image. `filter1` iterates through columns first and then rows, 
+while `filter2` iterates through rows first and then columns. Since the pixels are stored row-by-row in memory, 
+`filter2` accesses consecutive memory locations and therefore has better spatial locality/cache performance.
+
+(2) The raw data contains 10 execution-time measurements for each filter and image size, while the plot shows the average of those measurements. For the 2048×2048 image,
+ Filter 1 ranged from 0.029437 to 0.035965 seconds, a variation of about 0.006528 seconds. Filter 2 ranged from 0.015159 to 0.032417 seconds,
+  a variation of about 0.017258 seconds. Filter 2 is generally faster because it accesses pixels sequentially in memory,
+   although its measured times varied more between these runs.
+
+
+(3) Cachegrind shows that Filter 1 has many more L1 data-cache misses than Filter 2: about 1.35 million D1 misses (2.2%) compared with about 395 thousand (0.7%). 
+   Filter 1 accesses the image column-by-column, causing large jumps through the row-major pixel array, while Filter 2 accesses neighboring pixels row-by-row and therefore has better spatial locality. 
+   This allows Filter 2 to make better use of each cache line and helps explain why it generally runs faster in the normal timing tests. The execution times reported while running Cachegrind can differ 
+   from the normal results because Valgrind adds profiling overhead, so the cache-miss statistics are more useful here than the Valgrind timing itself.
+
+
